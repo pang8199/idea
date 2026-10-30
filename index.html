@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>我的个人空间</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root{
+    --wood-dark: #6b4f3a;
+    --wood-medium: #8b6a4f;
+    --wood-light: #c9a987;
+    --paper: #faf6ef;
+    --paper-deep: #f3ebdd;
+    --line: #e2d4c0;
+    --text: #3b3228;
+    --text-soft: #7a6b5a;
+  }
+
+  body{
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Serif SC", serif;
+    color: var(--text);
+    background-color: #ece2d0;
+    background-image:
+      url("https://images.unsplash.com/photo-1541126690252-d79a43f4e846?w=1600"),
+      linear-gradient(180deg, rgba(236,226,208,0.92), rgba(220,200,170,0.92));
+    background-blend-mode: overlay;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
+    padding: 24px 16px 40px;
+  }
+
+  .overlay{
+    background: rgba(250, 246, 239, 0.88);
+    min-height: calc(100vh - 64px);
+    border-radius: 18px;
+    border: 1px solid rgba(107,79,58,0.25);
+    box-shadow: 0 12px 34px rgba(90, 65, 45, 0.18);
+    padding: 24px;
+  }
+
+  .wrap{
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  header.zone{
+    text-align: center;
+    padding: 22px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.6), rgba(243,235,221,0.4)),
+      repeating-linear-gradient(90deg, rgba(139,106,79,0.06) 0px, rgba(139,106,79,0.06) 1px, transparent 1px, transparent 140px);
+    position: relative;
+  }
+  header.zone::before{
+    content:"";
+    position:absolute;
+    left:14px; right:14px; top:12px; bottom:12px;
+    border:1px dashed rgba(107,79,58,0.35);
+    border-radius:12px;
+    pointer-events:none;
+  }
+  header.zone h1{
+    font-size: 28px;
+    color: var(--wood-dark);
+    letter-spacing: 4px;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
+  }
+  header.zone .subtitle{
+    margin-top: 8px;
+    color: var(--wood-medium);
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+
+  nav.main-nav{
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  nav.main-nav button{
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.75);
+    color: var(--wood-dark);
+    padding: 12px 8px;
+    border-radius: 12px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.25s;
+    box-shadow: 0 3px 0 rgba(107,79,58,0.12);
+  }
+  nav.main-nav button:hover{
+    background: var(--wood-dark);
+    color: var(--paper);
+    transform: translateY(-2px);
+  }
+
+  .card{
+    margin-top: 18px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 8px 20px rgba(90, 65, 45, 0.12);
+  }
+  .card h2{
+    color: var(--wood-dark);
+    font-size: 20px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .grid-2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .panel{
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px;
+    background: rgba(255,255,255,0.55);
+    min-height: 140px;
+  }
+  .panel h3{
+    color: var(--wood-dark);
+    margin-bottom: 10px;
+    font-size: 17px;
+  }
+
+  .recent-list{ list-style: none; }
+  .recent-list li{
+    padding: 8px 10px;
+    border-left: 3px solid var(--wood-light);
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 8px;
+    color: var(--wood-dark);
+    font-size: 14px;
+  }
+
+  .btn{
+    background: var(--wood-dark);
+    color: var(--paper);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.25s;
+  }
+  .btn:hover{ background: #553d2c; }
+  .btn.ghost{
+    background: transparent;
+    color: var(--wood-dark);
+    border: 1px solid var(--wood-dark);
+  }
+  .btn.danger{
+    background: transparent;
+    color: #b55042;
+    border: 1px solid #b55042;
+  }
+
+  input, textarea{
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    background: rgba(255,255,255,0.85);
+    color: var(--text);
+  }
+  input:focus, textarea:focus{ border-color: var(--wood-medium); }
+
+  textarea{ min-height: 120px; resize: vertical; }
+
+  .form-row{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .photo-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .photo-item{
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--paper-deep);
+    aspect-ratio: 1/1;
+  }
+  .photo-item img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-item .del{
+    position: absolute;
+    top: 6px; right: 6px;
+    background: rgba(107,79,58,0.85);
+    color: var(--paper);
+    border: 1px solid rgba(255,255,255,0.6);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .novel-list, .idea-list{ list-style: none; }
+  .novel-item, .idea-item{
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.6);
+  }
+  .novel-item h4, .idea-item h4{
+    color: var(--wood-dark);
+    margin-bottom: 6px;
+  }
+  .novel-item p, .idea-item p{
+    color: var(--text-soft);
+    font-size: 14px;
+    white-space: pre-wrap;
+  }
+  .item-actions{
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cover-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .cover-card{
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 4px 0 rgba(107,79,58,0.08);
+    cursor: pointer;
+    transition: 0.25s;
+  }
+  .cover-card:hover{
+    transform: translateY(-3px);
+    background: rgba(201,169,135,0.25);
+  }
+  .cover-card .icon{
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+  .cover-card h3{
+    color: var(--wood-dark);
+    font-size: 16px;
+  }
+  .cover-card p{
+    color: var(--text-soft);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .modal-mask{
+    position: fixed; inset: 0;
+    background: rgba(59,50,40,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 16px;
+  }
+  .modal-mask.show{ display: flex; }
+  .modal{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px;
+    width: 100%;
+    max-width: 640px;
+    max-height: 86vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  .modal h2{
+    color: var(--wood-dark);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal-close{
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--wood-dark);
+    color: var(--paper);
+    border: 1px solid var(--line);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .read-content{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    line-height: 1.9;
+    font-size: 16px;
+    white-space: pre-wrap;
+  }
+  .read-content h3{
+    color: var(--wood-dark);
+    margin-bottom: 14px;
+    font-size: 22px;
+  }
+
+  .tag{
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--wood-medium);
+    color: var(--paper);
+    font-size: 12px;
+    margin-right: 6px;
+  }
+
+  footer{
+    margin-top: 24px;
+    text-align: center;
+    color: var(--wood-medium);
+    font-size: 13px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  @media (max-width: 720px){
+    nav.main-nav{ grid-template-columns: repeat(2, 1fr); }
+    .grid-2{ grid-template-columns: 1fr; }
+    .photo-grid{ grid-template-columns: repeat(2, 1fr); }
+    .cover-grid{ grid-template-columns: 1fr; }
+    header.zone h1{ font-size: 22px; }
+  }
+</style>
+</head>
+
+<body>
+<div class="overlay">
+  <div class="wrap">
+
+    <header class="zone">
+      <h1 id="zoneTitle">我的个人空间</h1>
+      <div class="subtitle" id="zoneSubtitle">一处安静的自留地</div>
+    </header>
+
+    <nav class="main-nav">
+      <button onclick="showView('home')">首页</button>
+      <button onclick="showView('photos')">照片</button>
+      <button onclick="showView('novels')">小说</button>
+      <button onclick="showView('ideas')">灵感</button>
+    </nav>
+
+    <!-- 首页 -->
+    <section id="view-home" class="view">
+      <div class="card">
+        <h2>欢迎回来</h2>
+        <p style="color:var(--text-soft);margin-bottom:12px;">这里只放你想放的东西：照片、小说、灵感，都可以慢慢添。</p>
+
+        <div class="cover-grid">
+          <div class="cover-card" onclick="showView('photos')">
+            <div class="icon">📷</div>
+            <h3>照片</h3>
+            <p>放一张今天的照片</p>
+          </div>
+          <div class="cover-card" onclick="showView('novels')">
+            <div class="icon">📖</div>
+            <h3>小说</h3>
+            <p>写一个故事，慢慢更新</p>
+          </div>
+          <div class="cover-card" onclick="showView('ideas')">
+            <div class="icon">💡</div>
+            <h3>灵感</h3>
+            <p>突然想到的，先记下来</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>最近照片</h3>
+          <ul class="recent-list" id="recentPhotos"></ul>
+        </div>
+        <div class="panel">
+          <h3>最近小说</h3>
+          <ul class="recent-list" id="recentNovels"></ul>
+        </div>
+        <div class="panel">
+          <h3>最近灵感</h3>
+          <ul class="recent-list" id="recentIdeas"></ul>
+        </div>
+        <div class="panel">
+          <h3>关于这个空间</h3>
+          <p style="font-size:14px;color:var(--text-soft);margin-bottom:8px;">你可以修改空间标题和副标题。</p>
+          <input id="editTitle" placeholder="空间标题" />
+          <input id="editSubtitle" placeholder="空间副标题" style="margin-top:8px;" />
+          <button class="btn" style="margin-top:10px;" onclick="saveZone()">保存门牌</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 照片 -->
+    <section id="view-photos" class="view" style="display:none;">
+      <div class="card">
+        <h2>照片</h2>
+        <div class="form-row">
+          <input type="file" id="photoFile" accept="image/*" />
+          <input id="photoUrl" placeholder="或粘贴图片链接" />
+          <button class="btn" onclick="addPhoto()">放一张照片</button>
+        </div>
+        <div class="photo-grid" id="photoGrid"></div>
+      </div>
+    </section>
+
+    <!-- 小说 -->
+    <section id="view-novels" class="view" style="display:none;">
+      <div class="card">
+        <h2>小说</h2>
+        <button class="btn" onclick="openNovelEditor()">写一篇新的</button>
+        <div class="novel-list" id="novelList" style="margin-top:14px;"></div>
+      </div>
+    </section>
+
+    <!-- 灵感 -->
+    <section id="view-ideas" class="view" style="display:none;">
+      <div class="card">
+        <h2>灵感入口</h2>
+        <div class="form-row">
+          <textarea id="ideaContent" placeholder="突然想到什么，就写在这里……"></textarea>
+          <input id="ideaTag" placeholder="标签，比如：人物 / 剧情 / 画面" />
+          <button class="btn" onclick="addIdea()">记录灵感</button>
+        </div>
+        <div class="idea-list" id="ideaList"></div>
+      </div>
+    </section>
+
+    <footer>
+      个人空间 · 安静生长
+    </footer>
+  </div>
+</div>
+
+<!-- 小说编辑弹窗 -->
+<div class="modal-mask" id="novelModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeNovelEditor()">×</button>
+    <h2 id="novelModalTitle">写一篇新的</h2>
+    <div class="form-row">
+      <input id="novelTitle" placeholder="小说标题" />
+      <input id="novelSummary" placeholder="简介" />
+      <textarea id="novelContent" placeholder="正文，空一行就是新段落"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn" onclick="saveNovel()">保存小说</button>
+      <button class="btn ghost" onclick="closeNovelEditor()">取消</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORE_KEY = 'personalWoodSpace_v2';
+
+  const defaultData = {
+    title: '我的个人空间',
+    subtitle: '一处安静的自留地',
+    photos: [],
+    novels: [],
+    ideas: []
+  };
+
+  function loadData(){
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return JSON.parse(JSON.stringify(defaultData));
+    try{
+      return Object.assign(JSON.parse(JSON.stringify(defaultData)), JSON.parse(raw));
+    }catch(e){
+      return JSON.parse(JSON.stringify(defaultData));
+    }
+  }
+
+  function saveData(){
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }
+
+  let data = loadData();
+  let editingNovelId = null;
+
+  function render(){
+    document.getElementById('zoneTitle').textContent = data.title;
+    document.getElementById('zoneSubtitle').textContent = data.subtitle;
+    document.getElementById('editTitle').value = data.title;
+    document.getElementById('editSubtitle').value = data.subtitle;
+
+    renderPhotos();
+    renderNovels();
+    renderIdeas();
+    renderRecent();
+  }
+
+  function showView(name){
+    document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+    document.getElementById('view-'+name).style.display='block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function saveZone(){
+    data.title = document.getElementById('editTitle').value || '我的个人空间';
+    data.subtitle = document.getElementById('editSubtitle').value || '一处安静的自留地';
+    saveData();
+    render();
+    alert('门牌已保存');
+  }
+
+  // 照片
+  function addPhoto(){
+    const fileInput = document.getElementById('photoFile');
+    const urlInput = document.getElementById('photoUrl');
+    const url = urlInput.value.trim();
+
+    const processUrl = (src)=>{
+      if(!src) return;
+      data.photos.unshift({
+        id: Date.now(),
+        src,
+        time: new Date().toLocaleString('zh-CN')
+      });
+      saveData();
+      render();
+      urlInput.value = '';
+      fileInput.value = '';
+    };
+
+    if(fileInput.files && fileInput.files[0]){
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onload = e => processUrl(e.target.result);
+      reader.readAsDataURL(file);
+    }else if(url){
+      processUrl(url);
+    }else{
+      alert('请选择图片或粘贴链接');
+    }
+  }
+
+  function deletePhoto(id){
+    if(!confirm('删除这张照片？')) return;
+    data.photos = data.photos.filter(p=>p.id!==id);
+    saveData();
+    render();
+  }
+
+  function renderPhotos(){
+    const box = document.getElementById('photoGrid');
+    if(data.photos.length===0){
+      box.innerHTML = '<p style="grid-column:1/-1;color:var(--text-soft);text-align:center;padding:20px;">还没有照片，先放一张吧。</p>';
+      return;
+    }
+    box.innerHTML = data.photos.map(p=>`
+      <div class="photo-item">
+        <img src="${p.src}" alt="照片" />
+        <button class="del" onclick="deletePhoto(${p.id})">×</button>
+      </div>
+    `).join('');
+  }
+
+  // 小说
+  function openNovelEditor(id){
+    editingNovelId = id || null;
+    document.getElementById('novelModal').classList.add('show');
+    if(id){
+      const novel = data.novels.find(n=>n.id===id);
+      document.getElementById('novelModalTitle').textContent = '编辑小说';
+      document.getElementById('novelTitle').value = novel.title;
+      document.getElementById('novelSummary').value = novel.summary;
+      document.getElementById('novelContent').value = novel.content;
+    }else{
+      document.getElementById('novelModalTitle').textContent = '写一篇新的';
+      document.getElementById('novelTitle').value = '';
+      document.getElementById('novelSummary').value = '';
+      document.getElementById('novelContent').value = '';
+    }
+  }
+
+  function closeNovelEditor(){
+    document.getElementById('novelModal').classList.remove('show');
+    editingNovelId = null;
+  }
+
+  function saveNovel(){
+    const title = document.getElementById('novelTitle').value.trim();
+    const summary = document.getElementById('novelSummary').value.trim();
+    const content = document.getElementById('novelContent').value;
+    if(!title){ alert('请填写标题'); return; }
+
+    if(editingNovelId){
+      const novel = data.novels.find(n=>n.id===editingNovelId);
+      novel.title = title;
+      novel.summary = summary;
+      novel.content = content;
+      novel.updateTime = new Date().toLocaleString('zh-CN');
+    }else{
+      data.novels.unshift({
+        id: Date.now(),
+        title, summary, content,
+        createTime: new Date().toLocaleString('zh-CN'),
+        updateTime: new Date().toLocaleString('zh-CN')
+      });
+    }
+    saveData();
+    render();
+    closeNovelEditor();
+  }
+
+  function deleteNovel(id){
+    if(!confirm('删除这篇小说？')) return;
+    data.novels = data.novels.filter(n=>n.id!==id);
+    saveData();
+    render();
+  }
+
+  function readNovel(id){
+    const novel = data.novels.find(n=>n.id===id);
+    const html = `
+      <div class="read-content">
+        <h3>${novel.title}</h3>
+        ${novel.summary ? '<p style="color:var(--text-soft);margin-bottom:16px;">'+novel.summary+'</p>' : ''}
+        <div>${novel.content || '(暂无正文)'}</div>
+        <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn" onclick="closeRead()">返回列表</button>
+          <button class="btn ghost" onclick="closeRead();openNovelEditor(${novel.id})">编辑</button>
+        </div>
+      </div>
+    `;
+    showModal(html, '阅读小说');
+  }
+
+  function closeRead(){
+    document.querySelector('.modal-mask.show')?.classList.remove('show');
+  }
+
+  function showModal(html, title){
+    const mask = document.createElement('div');
+    mask.className = 'modal-mask show';
+    mask.innerHTML = `
+      <div class="modal">
+        <button class="modal-close" onclick="this.closest('.modal-mask').remove()">×</button>
+        <h2>${title}</h2>
+        ${html}
+      </div>
+    `;
+    document.body.appendChild(mask);
+  }
+
+  function renderNovels(){
+    const box = document.getElementById('novelList');
+    if(data.novels.length===0){
+      box.innerHTML = '<p style="color:var(--text-soft);">还没有小说，点击“写一篇新的”开始。</p>';
+      return;
+    }
+    box.innerHTML = data.novels.map(n=>`
+      <div class="novel-item">
+        <h4>${n.title}</h4>
+        <p>${n.summary || '无简介'}</p>
+        <p style="color:var(--text-soft);margin-top:6px;font-size:12px;">更新于 ${n.updateTime}</p>
+        <div class="item-actions">
+          <button class="btn" onclick="readNovel(${n.id})">阅读</button>
+          <button class="btn ghost" onclick="openNovelEditor(${n.id})">编辑</button>
+          <button class="btn danger" onclick="deleteNovel(${n.id})">删除</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 灵感
+  function addIdea(){
+    const content = document.getElementById('ideaContent').value.trim();
+    const tag = document.getElementById('ideaTag').value.trim();
+    if(!content){ alert('先写点什么吧'); return; }
+    data.ideas.unshift({
+      id: Date.now(),
+      content, tag,
+      time: new Date().toLocaleString('zh-CN')
+    });
+    saveData();
+    document.getElementById('ideaContent').value = '';
+    document.getElementById('ideaTag').value = '';
+    render();
+  }
+
+  function deleteIdea(id){
+    if(!confirm('删除这条灵感？')) return;
+    data.ideas = data.ideas.filter(i=>i.id!==id);
+    saveData();
+    render();
+  }
+
+  function renderIdeas(){
+    const box = document.getElementById('ideaList');
+    if(data.ideas.length===0){
+      box.innerHTML = '<p style="color:var(--text-soft);">还没有灵感，想到就记下来吧。</p>';
+      return;
+    }
+    box.innerHTML = data.ideas.map(i=>`
+      <div class="idea-item">
+        <h4>${i.tag ? '<span class="tag">'+i.tag+'</span>' : ''}灵感 #${i.id}</h4>
+        <p>${i.content}</p>
+        <p style="color:var(--text-soft);margin-top:6px;font-size:12px;">${i.time}</p>
+        <div class="item-actions">
+          <button class="btn danger" onclick="deleteIdea(${i.id})">删除</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 最近动态
+  function renderRecent(){
+    document.getElementById('recentPhotos').innerHTML = data.photos.slice(0,4).map(p=>`<li>📷 ${p.time}</li>`).join('') || '<li>暂无照片</li>';
+    document.getElementById('recentNovels').innerHTML = data.novels.slice(0,4).map(n=>`<li>📖 ${n.title}</li>`).join('') || '<li>暂无小说</li>';
+    document.getElementById('recentIdeas').innerHTML = data.ideas.slice(0,4).map(i=>`<li>💡 ${(i.content||'').slice(0,18)}</li>`).join('') || '<li>暂无灵感</li>';
+  }
+
+  render();
+</script>
+</body>
+</html>
